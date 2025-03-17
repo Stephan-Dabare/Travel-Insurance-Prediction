@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Insurance Prediction</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script>
+        function resetForm() {
+            // Reset the form values
+            document.getElementById("predictionForm").reset();
+
+            // Manually clear the values to ensure they don't retain submitted data
+            document.getElementById("age").value = "";
+            document.getElementById("annual_income").value = "";
+            document.getElementById("family_members").value = "";
+            document.getElementById("chronic_diseases").value = "";
+
+            // Reset all select elements to the default value
+            document.getElementById("employment_type").selectedIndex = 0;
+            document.getElementById("graduate_or_not").selectedIndex = 0;
+            document.getElementById("frequent_flyer").selectedIndex = 0;
+            document.getElementById("ever_travelled_abroad").selectedIndex = 0;
+
+            // Clear the prediction result
+            document.getElementById("resultContainer").innerHTML = "";
+        }
+    </script>
+</head>
+<body>
+<!--    <div class="background-image"></div>-->
+    <div class="content">
+        <h1>Travel Insurance Prediction</h1>
+        <form id="predictionForm" method="POST">
+            <div class="form-container">
+                <div class="form-left">
+                    <div class="form-group">
+                        <label for="age">Applicant's Age:</label>
+                        <input type="number" id="age" name="age" value="{{ request.form.age }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="annual_income">Annual Income (in USD):</label>
+                        <input type="number" id="annual_income" name="annual_income" value="{{ request.form.annual_income }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="family_members">Number of Family Members:</label>
+                        <input type="number" id="family_members" name="family_members" value="{{ request.form.family_members }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="chronic_diseases">Number of Chronic Diseases:</label>
+                        <input type="number" id="chronic_diseases" name="chronic_diseases" value="{{ request.form.chronic_diseases }}" required>
+                    </div>
+                </div>
+                <div class="form-right">
+                    <div class="form-group">
+                        <label for="employment_type">Type of Employment:</label>
+                        <select id="employment_type" name="employment_type" required>
+                            <option value="" disabled selected>Select one</option>
+                            <option value="Government Sector" {% if request.form.employment_type == 'Government Sector' %}selected{% endif %}>Government Sector</option>
+                            <option value="Private Sector/Self Employed" {% if request.form.employment_type == 'Private Sector/Self Employed' %}selected{% endif %}>Private Sector/Self Employed</option>
+                            <option value="Private Sector/Self Employed" {% if request.form.employment_type == 'Private Sector/Self Employed' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="graduate_or_not">Graduate or Not:</label>
+                        <select id="graduate_or_not" name="graduate_or_not" required>
+                            <option value="" disabled selected>Select one</option>
+                            <option value="Yes" {% if request.form.graduate_or_not == 'Yes' %}selected{% endif %}>Yes, Graduate</option>
+                            <option value="No" {% if request.form.graduate_or_not == 'No' %}selected{% endif %}>No, Non-Graduate</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="frequent_flyer">Frequent Flyer Status:</label>
+                        <select id="frequent_flyer" name="frequent_flyer" required>
+                            <option value="" disabled selected>Select one</option>
+                            <option value="Yes" {% if request.form.frequent_flyer == 'Yes' %}selected{% endif %}>Frequent Traveler</option>
+                            <option value="No" {% if request.form.frequent_flyer == 'No' %}selected{% endif %}>Rarely Travels</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ever_travelled_abroad">Previous International Travel:</label>
+                        <select id="ever_travelled_abroad" name="ever_travelled_abroad" required>
+                            <option value="" disabled selected>Select one</option>
+                            <option value="Yes" {% if request.form.ever_travelled_abroad == 'Yes' %}selected{% endif %}>Yes</option>
+                            <option value="No" {% if request.form.ever_travelled_abroad == 'No' %}selected{% endif %}>No, Never Traveled Abroad</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <input type="submit" value="Generate Prediction">
+                <input type="button" value="Clear Fields" onclick="resetForm()">
+            </div>
+        </form>
+
+        <div id="resultContainer" class="result-container">
+            {% if result %}
+                <h2>Prediction Result:</h2>
+                <p>{{ result }}</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
